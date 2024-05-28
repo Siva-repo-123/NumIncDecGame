@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Bi-Direction Game</title>
+  <style>
+  body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  .grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  width: 400px;  
+  height: 300px;
+}
+.arrow-button {
+  width: 56px;
+  height: 30px;
+  border-radius: 50%; 
+  cursor: pointer;
+}
+
+.red {
+  color: red;
+  border: none;
+  background-color: white;
+}
+
+.green {
+  color: green;
+  border: none;
+  background-color: white;
+}
+
+#play {
+    width: 50px;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+    font-size: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+#pause {
+  width: 50px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  font-size: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+#number {
+  font-size: 100px;
+  font-weight: bold;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ebebeb;
+  margin: 20px auto;
+}   
+.fa-caret-down,.fa-caret-up{
+    width: 40px;
+    height: 50px;
+}
+#increase i{
+  transform: rotate(-90deg);
+}
+#decrease i{
+  transform: rotate(90deg);
+}
+</style>
+</head>
+<body>
+  <div class="grid-container">
+    <div class="grid-item"></div>
+    <div class="grid-item" style="display: flex;justify-content:center;align-items:center;height: 111px;"><button id="increase" class="arrow-button green"><i class="fa fa-play fa-5x" aria-hidden="true"></i></button></div>
+    <div class="grid-item"></div>  
+    <div class="grid-item" style="display: flex;justify-content: end;align-items: center;"><button id="play" class="play-button"><i class="fa fa-pause" aria-hidden="true"></i></button></div>
+    <div class="grid-item" style="display: flex;justify-content: center;align-items: center;"><div id="number">0</div></div>
+    <div class="grid-item" style="display: flex;align-items: center;"><button id="pause" class="pause-button"><i class="fa fa-play" aria-hidden="true"></i></button></div>  
+    <div class="grid-item"></div>
+    <div class="grid-item" style="display: flex;justify-content:center;align-items: start;height: 111px"><button id="decrease" class="arrow-button red"><i class="fa fa-play fa-5x" aria-hidden="true"></i></button></div>
+    <div class="grid-item"></div>  
+  </div>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+  const numberElement = document.getElementById("number");
+  const increaseButton = document.getElementById("increase");
+  const decreaseButton = document.getElementById("decrease");
+  const playButton = document.getElementById("play");
+  const pauseButton = document.getElementById("pause");
+
+  let counterValue = 0;
+  let intervalId = null;
+  let isAutoIncrement = false;
+
+  function increaseCounter() {
+    if (counterValue < 99) {
+      counterValue++;
+      numberElement.textContent = counterValue;
+    }
+  }
+
+  function decreaseCounter() {
+    if (counterValue > 0) {
+      counterValue--;
+      numberElement.textContent = counterValue;
+    }
+  }
+
+  function startAutoCounter() {
+    if (!isAutoIncrement) {
+      intervalId = setInterval(function() {
+        increaseCounter();
+      }, 1000);
+
+      isAutoIncrement = true;
+      increaseButton.disabled = true;
+      decreaseButton.disabled = true;
+    }
+  }
+
+  function stopAutoCounter() {
+    if (isAutoIncrement) {
+      clearInterval(intervalId);
+      isAutoIncrement = false;
+      increaseButton.disabled = false;
+      decreaseButton.disabled = false;
+    }
+  }
+
+  increaseButton.addEventListener("click", increaseCounter);
+  decreaseButton.addEventListener("click", decreaseCounter);
+  playButton.addEventListener("click", startAutoCounter);
+  pauseButton.addEventListener("click", stopAutoCounter);
+
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "ArrowUp") {
+      increaseCounter();
+    } else if (event.key === "ArrowDown") {
+      decreaseCounter();
+    }
+  });
+});
+</script>
+</html>
